@@ -30,5 +30,13 @@ jobs:
         no-parallel: true
         version: master
        env:
-          SCOPE_RUNNER_ENABLED: true
-          SCOPE_RUNNER_EXCLUDE_BRANCHES: master
+         SCOPE_DEBUG: true
+         SCOPE_RUNNER_ENABLED: true
+         SCOPE_RUNNER_EXCLUDE_BRANCHES: master
+
+    - name: Upload Scope logs
+      if: always()
+      uses: actions/upload-artifact@v1
+      with:
+        name: Scope for Go logs
+        path: /home/runner/.scope-results
