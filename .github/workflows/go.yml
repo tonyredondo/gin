@@ -26,7 +26,7 @@ jobs:
        uses: undefinedlabs/scope-for-go-action@v2
        with:
         dsn: ${{secrets.SCOPE_DSN}}
-        race-detector: true
+        race-detector: false
         no-parallel: true
         version: master
        env:
