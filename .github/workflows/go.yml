@@ -33,8 +33,7 @@ jobs:
        env:
          SCOPE_DEBUG: true
          SCOPE_RUNNER_ENABLED: true
-         SCOPE_RUNNER_EXCLUDE_BRANCHES: ba88c610912d07b9e5a4319e0385c22385249a06
-
+         SCOPE_RUNNER_EXCLUDE_BRANCHES: master
 
 
     - name: Upload Scope logs
