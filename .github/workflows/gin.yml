@@ -75,7 +75,9 @@ jobs:
           api_key: ${{ secrets.DD_API_KEY }}
 
       - name: Run Tests
-        run: make test
+        run: |
+          go install github.com/DataDog/orchestrion@latest
+          make test
 
       - name: Upload orchestrion logs
         if: always()
