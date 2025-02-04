@@ -75,10 +75,7 @@ jobs:
           api_key: ${{ secrets.DD_API_KEY }}
 
       - name: Run Tests
-        run: |
-          orchestrion pin
-          go get github.com/DataDog/orchestrion
-          make test
+        run: make test
         env:
           DD_API_KEY: ${{ secrets.DD_API_KEY }}
 
