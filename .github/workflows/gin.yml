@@ -75,7 +75,9 @@ jobs:
           api_key: ${{ secrets.DD_API_KEY }}
 
       - name: Run Tests
-        run: make test
+        run: |
+          orchestrion pin
+          make test
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
