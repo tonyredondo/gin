@@ -77,6 +77,7 @@ jobs:
       - name: Run Tests
         run: |
           go install github.com/DataDog/orchestrion@f137fbec82f2fbd02a719a136f74bcce384f08f8
+          orchestrion pin
           go get github.com/DataDog/orchestrion
           make test
         env:
