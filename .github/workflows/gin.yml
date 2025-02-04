@@ -81,6 +81,17 @@ jobs:
           go get github.com/DataDog/orchestrion
           go mod tidy
           make test
+        env:
+          ORCHESTRION_LOG_LEVEL: trace
+          ORCHESTRION_LOG_FILE: orchestrion.log
+
+      - name: Upload orchestrion logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: orchestrion-log
+          path: |
+            orchestrion.log
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
