@@ -68,6 +68,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-go-
 
+      - name: Configure Datadog Test Optimization
+        uses: datadog/test-visibility-github-action@bfe99680a9b9ae0e972f9378e15f46f26fd5f9e8
+        with:
+          languages: go
+          api_key: ${{ secrets.DD_API_KEY }}
+
       - name: Run Tests
         run: make test
 
