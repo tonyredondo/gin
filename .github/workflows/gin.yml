@@ -76,9 +76,6 @@ jobs:
 
       - name: Run Tests
         run: make test
-        env:
-          ORCHESTRION_LOG_LEVEL: trace
-          ORCHESTRION_LOG_FILE: orchestrion.log
 
       - name: Upload orchestrion logs
         if: always()
