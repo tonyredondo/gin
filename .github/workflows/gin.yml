@@ -77,9 +77,9 @@ jobs:
       - name: Run Tests
         run: |
           go install github.com/DataDog/orchestrion@latest
-          orchestrion pin
-          go get github.com/DataDog/orchestrion
-          go mod tidy
+#          orchestrion pin
+#          go get github.com/DataDog/orchestrion
+#          go mod tidy
           make test
         env:
           ORCHESTRION_LOG_LEVEL: trace
