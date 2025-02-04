@@ -69,7 +69,7 @@ jobs:
             ${{ runner.os }}-go-
 
       - name: Configure Datadog Test Optimization
-        uses: datadog/test-visibility-github-action@bfe99680a9b9ae0e972f9378e15f46f26fd5f9e8
+        uses: datadog/test-visibility-github-action@d1fe48ed2c9705bfd5bdaadfdc94d05be3a99a16
         with:
           languages: go
           api_key: ${{ secrets.DD_API_KEY }}
