@@ -77,6 +77,7 @@ jobs:
       - name: Run Tests
         run: |
           orchestrion pin
+          go install github.com/DataDog/orchestrion
           make test
 
       - name: Upload coverage to Codecov
