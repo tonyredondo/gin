@@ -170,3 +170,4 @@ Here are some awesome projects that are using the [Gin](https://github.com/gin-g
 Gin is the work of hundreds of contributors. We appreciate your help!
 
 Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details on submitting patches and the contribution workflow.
+
