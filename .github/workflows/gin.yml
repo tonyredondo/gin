@@ -69,23 +69,13 @@ jobs:
             ${{ runner.os }}-go-
 
       - name: Configure Datadog Test Optimization
-        uses: datadog/test-visibility-github-action@d1fe48ed2c9705bfd5bdaadfdc94d05be3a99a16
+        uses: datadog/test-visibility-github-action@v2
         with:
           languages: go
           api_key: ${{ secrets.DD_API_KEY }}
 
       - name: Run Tests
         run: make test
-        env:
-          DD_API_KEY: ${{ secrets.DD_API_KEY }}
-
-      - name: Upload orchestrion logs
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: orchestrion-logs-${{ matrix.os }}-${{ matrix.go }}-${{ matrix.test-tags }}
-          path: |
-            orchestrion.log
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
