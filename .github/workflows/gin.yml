@@ -29,7 +29,6 @@ jobs:
           version: v1.61.0
           args: --verbose
   test:
-    needs: lint
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
@@ -67,6 +66,14 @@ jobs:
           key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
           restore-keys: |
             ${{ runner.os }}-go-
+
+      - name: Configure Datadog Test Optimization
+        uses: datadog/test-visibility-github-action@v2
+        with:
+          languages: go
+          api_key: ${{ secrets.DD_API_KEY }}
+          go-tracer-version: v1.1.0
+          site: datad0g.com
 
       - name: Run Tests
         run: make test
