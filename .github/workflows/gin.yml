@@ -72,7 +72,7 @@ jobs:
         with:
           languages: go
           api_key: ${{ secrets.DD_API_KEY }}
-          go-tracer-version: v1.1.0
+          # go-tracer-version: v1.1.0
           site: datad0g.com
 
       - name: Run Tests
