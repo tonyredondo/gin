@@ -39,11 +39,15 @@ jobs:
           echo "go: $(command -v go)"
           echo "DD_TRACER_VERSION_GO=$DD_TRACER_VERSION_GO"
           go env GOVERSION
+          # The whole output, ddtest's debug logs included, goes to the job's log
+          # and to go-test.log for the summary below.
+          set -o pipefail
           status=0
-          go test -count=1 ./... > go-test.log 2>&1 || status=$?
+          go test -count=1 -v ./... 2>&1 | tee go-test.log || status=$?
           echo "--- go test exit status: $status"
           echo "--- package results:"
-          grep -E '^(ok|FAIL|---)\s' go-test.log | head -40 || true
+          grep -E '^(ok|FAIL)\s' go-test.log | head -40 || true
+          echo "--- tests: $(grep -c -- '^--- PASS' go-test.log || true) passed, $(grep -c -- '^--- FAIL' go-test.log || true) failed, $(grep -c -- '^--- SKIP' go-test.log || true) skipped"
           echo "--- instrumented test functions: $(grep -c 'instrumentTestingTFunc: instrumenting test function' go-test.log || true)"
           echo "--- Test Optimization errors (first 20 distinct):"
           grep -E 'TestOptimization.*(ERROR|WARN)' go-test.log | sed -E 's/^[0-9/]+ [0-9:]+ //; s/\(occurred: [^)]*\)//' | sort | uniq -c | sort -rn | head -20 || true
