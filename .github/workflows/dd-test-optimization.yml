@@ -1,0 +1,54 @@
+# QA for DataDog/test-visibility-github-action#78: the example from its
+# description, on gin's own tests, with a dummy API key. The intake rejects
+# that key, which shows that go test sent events through ddtest.
+name: Datadog Test Optimization QA
+
+on:
+  push:
+    branches:
+      - dd-test-optimization-action-v16
+
+permissions:
+  contents: read
+
+jobs:
+  go:
+    name: go (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+      - uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5.6.0
+        with:
+          go-version: stable
+      - name: Configure Datadog Test Optimization
+        uses: DataDog/test-visibility-github-action@b284d17ce9d60e360d511d38c69e6e90a4c9ccd4 # PR #78 head
+        with:
+          languages: go
+          api_key: dummy
+      - name: Run tests
+        env:
+          DD_TRACE_DEBUG: "true"
+        run: |
+          echo "go: $(command -v go)"
+          echo "DD_TRACER_VERSION_GO=$DD_TRACER_VERSION_GO"
+          go env GOVERSION
+          status=0
+          go test -count=1 ./... > go-test.log 2>&1 || status=$?
+          echo "--- go test exit status: $status"
+          echo "--- package results:"
+          grep -E '^(ok|FAIL|---)\s' go-test.log | head -40 || true
+          echo "--- instrumented test functions: $(grep -c 'instrumentTestingTFunc: instrumenting test function' go-test.log || true)"
+          echo "--- Test Optimization errors (first 20 distinct):"
+          grep -E 'TestOptimization.*(ERROR|WARN)' go-test.log | sed -E 's/^[0-9/]+ [0-9:]+ //; s/\(occurred: [^)]*\)//' | sort | uniq -c | sort -rn | head -20 || true
+          echo "--- intake responses:"
+          grep -E -o 'citestcycle[^"]*"?[^\n]{0,160}(40[0-9]|Forbidden|Unauthorized|api key)[^\n]{0,80}' go-test.log | sort | uniq -c | head -10 || true
+          echo "--- git status after go test:"
+          git status --porcelain
+          exit "$status"
