@@ -56,3 +56,23 @@ jobs:
           echo "--- git status after go test:"
           git status --porcelain
           exit "$status"
+
+  # The same tests on Windows without the action, to tell gin's own Windows
+  # failures from ddtest's.
+  control-windows:
+    name: go without the action (windows-latest)
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+      - uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5.6.0
+        with:
+          go-version: stable
+      - name: Run tests
+        run: |
+          echo "go: $(command -v go)"
+          go test -count=1 -v ./... 2>&1 | tee go-test.log || true
+          echo "--- failed tests:"
+          grep -E '^\s*--- FAIL' go-test.log || echo "(none)"
